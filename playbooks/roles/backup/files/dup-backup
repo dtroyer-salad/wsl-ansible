@@ -1,0 +1,73 @@
+#!/bin/bash
+# dup-backup - Duplicity backup to synchronized dir
+#
+# dup-backup [-h <hostname>] [full|list|status|verify|cleanup|clean] [options]
+#
+# dup-backup restore <restore-dest> [options]
+#   --file-to-restore <file> --time=<date-time>
+#
+# Most options are passed through to duplicity
+
+if [[ -n $1 && "$1" == "-h" ]]; then
+    HOSTNAME=$2
+    shift 2
+    HOSTNAME_CONF="-$HOSTNAME"
+else
+    HOSTNAME=$(hostname)
+    HOSTNAME_CONF=""
+fi
+
+DEST=file:///backup/${HOSTNAME}/dup
+CONF=/etc/dup-backup${HOSTNAME_CONF}.conf
+LOCAL_CONF=/etc/dup-backup${HOSTNAME_CONF}-local.conf
+
+if [[ -x /root/.dup-backup ]]; then
+    source /root/.dup-backup
+    key="--encrypt-key $KEY"
+    export PASSPHRASE
+else
+    key="--no-encryption"
+fi
+
+full_time=1M
+src="/"
+include="--include-filelist $CONF"
+if [[ -r $LOCAL_CONF ]]; then
+    include="--include-filelist $LOCAL_CONF ${include}"
+fi
+
+cmd=""
+if [[ "$1" == "full" ]]; then
+    cmd="full"
+    shift
+elif [[ "$1" == "verify" ]]; then
+    cmd="verify"
+    shift
+elif [[ "$1" == "list" ]]; then
+    duplicity list-current-files $key $DEST
+    exit $?
+elif [[ "$1" == "status" ]]; then
+    duplicity collection-status $key $DEST
+    exit $?
+elif [[ "$1" == "restore" ]]; then
+    # $2 has the restore destination in it
+    restore_dest=$2
+    shift; shift
+    duplicity restore $key $opts $DEST $restore_dest
+    exit $?
+elif [[ "$1" == "cleanup" ]]; then
+    duplicity cleanup --force $key $DEST
+    exit $?
+elif [[ "$1" == "clean" ]]; then
+    duplicity remove-older-than 6M --force $key $DEST
+    exit $?
+else
+    cmd="--full-if-older-than $full_time"
+fi
+
+opts=$@
+
+if [[ "$cmd" != "verify" ]]; then
+    duplicity $cmd $key $opts $include $src $DEST
+fi
+duplicity verify $key $opts $include $DEST $src

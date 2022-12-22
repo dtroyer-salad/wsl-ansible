@@ -1,0 +1,49 @@
+# backup/tasks/main.yaml
+---
+- name: Install packages
+  apt:
+    name: "{{ query('flattened', ['duplicity']) }}"
+    state: 'present'
+    install_recommends: False
+
+- name: root-bin
+  file:
+    path: /root/bin
+    state: directory
+    mode: 0755
+
+- name: Backup script
+  copy: src=dup-backup dest=/root/bin/dup-backup mode=0755
+
+- name: Backup config
+  copy: src=dup-backup.conf dest=/etc/dup-backup.conf
+
+- name: .ssh
+  file:
+    path: /root/etc
+    state: directory
+    mode: 0755
+
+# - name: Add backup ssh keys
+#   loop: "{{ backup_users }}"
+#   authorized_key:
+#     user: root
+#     state: present
+#     key: "{{ all_users[item].key }}"
+#     exclusive: no
+#   when:
+#     - item in all_users
+#     - "'key' in all_users[item]"
+
+- name: Duplicity cron job
+  cron:
+    cron_file: datasync
+    name: dup-backup
+    state: present
+    user: root
+    minute: "10"
+    hour: "5"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    job: "/root/bin/dup-backup"

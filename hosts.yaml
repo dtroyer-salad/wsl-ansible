@@ -1,0 +1,34 @@
+# XR7 hosts
+
+all:
+  hosts:
+
+disabled:
+  hosts:
+    local-win:
+
+# Base groups
+
+bootstrap:
+  hosts:
+    local-win:
+      ansible_connection: winrm
+    local-wsl:
+      ansible_connection: local
+  vars:
+    # ansible_ssh_user: ubuntu
+    ansible_port: 22
+
+debian:
+  hosts:
+    local-wsl:
+
+# Role groups
+
+backup:
+  hosts:
+    local-wsl:
+
+godev:
+  hosts:
+    local-wsl:

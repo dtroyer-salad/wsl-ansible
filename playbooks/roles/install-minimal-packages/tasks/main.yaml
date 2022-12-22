@@ -1,0 +1,28 @@
+---
+- name: Install necessary packages (DEBIAN)
+  package: 
+    name: '{{ item }}'
+    state: latest
+  with_items:
+  - git
+  - lvm2
+  - net-tools
+  - ntpdate
+  - rsync
+  - screen
+  - tree
+  - vim
+  - ufw
+  - wget
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install necessary packages (RHEL)
+  package:
+  with_items:
+  - git
+  - ntpdate
+  - screen
+  - tree
+  - vim
+  - wget
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

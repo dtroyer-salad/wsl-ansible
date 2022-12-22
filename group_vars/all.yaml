@@ -1,0 +1,31 @@
+---
+
+# Users section: https://opendev.org/opendev/system-config/src/branch/master/playbooks/group_vars/all.yaml
+
+# When adding new users, always pick a UID larger than the last UID, do not
+# fill in holes in the middle of the range.
+all_users:
+  dtroyer:
+    comment: Dean Troyer
+    key: |
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcVNZlj+Ac496jNChmF1LhGCo6dyVnb758AxFjYjMrz dtroyer@sterling.lan
+    uid: 1000
+    gid: 1000
+
+# List of users to install on all hosts
+base_users:
+  - dtroyer
+
+# Default empty list of users to install on specific hosts or groups
+extra_users: []
+
+# Users who should be removed
+disabled_users: []
+
+# Email destination
+mailhub: mail2.xr7.org:587
+
+# Email config
+email_domain: xr7.org
+root_email: "dt-root@{{ email_domain }}"
+mailhub: "mail2.{{ email_domain}}"

@@ -1,0 +1,10 @@
+# boostrap.yaml
+---
+
+- hosts: "{{ host|default('bootstrap') }}:!disabled"
+  name: "Bootstrap hosts"
+  become: yes
+  roles:
+    - os-update
+    - install-minimal-packages
+    - users

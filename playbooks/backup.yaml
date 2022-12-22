@@ -1,0 +1,6 @@
+# playbooks/backup.yaml
+---
+- hosts: "{{ host|default('backup') }}:!disabled"
+  become: yes
+  roles:
+    - backup
