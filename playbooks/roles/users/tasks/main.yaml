@@ -83,3 +83,15 @@
   when:
     - item in all_users
     - "'key' in all_users[item]"
+
+- name: Make ssh keys for users
+  loop: "{{ base_users + extra_users }}"
+  openssh_keypair:
+    path: "/home/{{ item }}/.ssh/id_ed25519"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    type: ed25519
+    comment: "{{ item }}@{{ ansible_hostname }}"
+    state: present
+  when:
+    - item in all_users
