@@ -1,14 +1,19 @@
 # Windows Ansible Bits
 
-Run entire site:
+Run all parts:
 
 	make all
 
-Other targets:
+Targets:
 
-	* backup
-    * bootstrap
+	* backup - Install backup bits
+    * bootstrap - Basic WSL configuration
+    * dotfiles - $HOME configuration files from a personal repo
 
 Bootstrap a new server:
 
     ./bootstrap.sh
+
+Bootstrap a new server remotely:
+
+    curl https://raw.githubusercontent.com/dtroyer-salad/wsl-ansible/main/bootstrap.sh | bash

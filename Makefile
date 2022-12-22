@@ -1,4 +1,4 @@
-# salad ansible
+# Salad WSL Setup
 
 INVENTORY=--inventory-file=hosts.yaml
 VAULT_PW = --vault-password-file $(HOME)/.saladpwd
@@ -16,9 +16,7 @@ endif
 
 ARGS = $(OPTS) $(EXTRA)
 
-all: bootstrap
-
-setup: get-roles
+all: bootstrap dotfiles backup
 
 backup:
 	ansible-playbook $(INVENTORY) $(ARGS) playbooks/backup.yaml
@@ -26,11 +24,8 @@ backup:
 bootstrap:
 	ansible-playbook $(INVENTORY) $(ARGS) playbooks/bootstrap.yaml
 
-# Download external roles
-get-roles: get-docker
-
-get-docker:
-	ansible-galaxy install -v -p ~/.ansible/roles geerlingguy.docker
+dotfiles:
+	ansible-playbook $(INVENTORY) $(ARGS) playbooks/dotfiles.yaml
 
 # Maintain secrets
 
@@ -40,4 +35,4 @@ edit-secrets:
 encrypt-string:
 	ansible-vault encrypt_string $(VAULT_PW) "$(VAL)"
 
-.PHONY: edit-secrets get-roles
+.PHONY: edit-secrets

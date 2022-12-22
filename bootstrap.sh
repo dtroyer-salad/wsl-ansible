@@ -14,7 +14,9 @@
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
 GIT_REPO=${GIT_REPO:-https://github.com/dtroyer-salad/wsl-ansible.git}
-REPO_DIR=~/wsl-ansible
+REPO_DIR=~/src/wsl-ansible
+
+mkdir -p $(dirname ${REPO_DIR})
 
 # Ensure we have the basics - Assumes Debian/Ubuntu
 sudo apt-get update
