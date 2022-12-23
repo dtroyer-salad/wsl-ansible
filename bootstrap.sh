@@ -34,7 +34,6 @@ if [[ -r /etc/os-release ]]; then
       ;;
     fedora)
       # Fedora/RHEL/OEL
-      sudo dnf -y update
       sudo dnf -y install ansible-core git make
       ansible-galaxy collection install ansible.posix community.crypto
       ;;

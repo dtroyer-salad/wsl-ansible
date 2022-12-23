@@ -41,7 +41,6 @@
     owner: root
     group: root
     mode: 0644
-  # when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Delete old users
   loop: "{{ disabled_users }}"

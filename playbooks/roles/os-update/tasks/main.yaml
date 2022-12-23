@@ -17,6 +17,6 @@
       yum:
         name: '*'
         state: latest
-      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'Oracle Linux'
   tags:
     - update
