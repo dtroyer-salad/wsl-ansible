@@ -1,0 +1,16 @@
+# dotfiles/tasks/main.yaml
+---
+
+- name: Get home 'dotfiles' repo
+  loop: "{{ base_users + extra_users }}"
+  git:
+    repo: "{{ all_users[item].dotfiles_repo }}"
+    dest: "/home/{{ item }}/src/dotfiles"
+    version: main
+    update: yes
+    accept_hostkey: yes
+  become: true
+  become_user: "{{ item }}"
+  when:
+    - item in all_users
+    - "'dotfiles_repo' in all_users[item]"

@@ -20,9 +20,11 @@
   package:
   with_items:
   - git
+  - lvm2
   - ntpdate
+  - rsync
   - screen
   - tree
   - vim
   - wget
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'Oracle Linux'

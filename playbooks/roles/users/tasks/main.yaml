@@ -19,7 +19,7 @@
 
 - name: Add sudo group
   group:
-    name: "sudo"
+    name: "{{ sudo_group }}"
     state: present
 
 # NOTE(mordred): We replace the main file rather than dropping a file in to
@@ -29,7 +29,7 @@
 - name: Setup sudoers file
   copy:
     dest: /etc/sudoers
-    src: sudoers
+    src: '{{ ansible_facts.os_family }}/sudoers'
     owner: root
     group: root
     mode: 0440
@@ -41,6 +41,7 @@
     owner: root
     group: root
     mode: 0644
+  # when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Delete old users
   loop: "{{ disabled_users }}"
@@ -67,7 +68,7 @@
     uid: "{{ all_users[item].uid }}"
     group: "{{ item }}"
     comment: "{{ all_users[item].comment }}"
-    groups: sudo
+    groups: "{{ sudo_group }}"
     shell: /bin/bash
   when:
     - item in all_users

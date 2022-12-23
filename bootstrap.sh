@@ -1,5 +1,5 @@
 #!/bin/bash
-# bootstrap.sh - boostrap new WSL
+# bootstrap.sh - Boostrap new WSL
 #
 # boostrap.sh
 #
@@ -10,17 +10,36 @@
 #
 # Run bootstrap.sh
 
+set -o errexit
+set -o xtrace
+
 # Keep track of the current script directory.
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
 GIT_REPO=${GIT_REPO:-https://github.com/dtroyer-salad/wsl-ansible.git}
-REPO_DIR=~/src/wsl-ansible
+REPO_DIR=${REPO_DIR:-~/src/wsl-ansible}
 
 mkdir -p $(dirname ${REPO_DIR})
 
-# Ensure we have the basics - Assumes Debian/Ubuntu
-sudo apt-get update
-sudo apt-get install ansible git make
+# Ensure we have the basics
+if [[ -r /etc/os-release ]]; then
+  source /etc/os-release
+  ID_LIKE=${ID_LIKE:-$ID}
+  case "$ID_LIKE" in
+    debian)
+      # Debian/Ubuntu
+      sudo apt-get update
+      sudo apt-get -y upgrade
+      sudo apt-get -y install ansible git make
+      ;;
+    fedora)
+      # Fedora/RHEL/OEL
+      sudo dnf -y update
+      sudo dnf -y install ansible-core git make
+      ansible-galaxy collection install ansible.posix community.crypto
+      ;;
+  esac
+fi
 
 if [[ ! -r ${REPO_DIR}/playbooks/bootstrap.yaml ]]; then
   # Retrieve the ansible repo
