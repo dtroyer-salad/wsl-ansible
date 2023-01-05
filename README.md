@@ -10,10 +10,6 @@ Targets:
     * bootstrap - Basic WSL configuration
     * dotfiles - $HOME configuration files from a personal repo
 
-Bootstrap a new server:
+Bootstrap a new server without cloning the repo locally:
 
-    ./bootstrap.sh
-
-Bootstrap a new server remotely:
-
-    curl https://raw.githubusercontent.com/dtroyer-salad/wsl-ansible/main/bootstrap.sh | bash
+    curl https://raw.githubusercontent.com/dtroyer-salad/wsl-ansible/main/bootstrap.sh | bash -s

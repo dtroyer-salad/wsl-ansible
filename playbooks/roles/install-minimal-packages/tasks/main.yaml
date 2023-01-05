@@ -4,7 +4,9 @@
     name: '{{ item }}'
     state: latest
   with_items:
+  - curl
   - git
+  - gpg
   - lvm2
   - net-tools
   - ntpdate
@@ -19,7 +21,9 @@
 - name: Install necessary packages (RHEL)
   package:
   with_items:
+  - curl
   - git
+  - gpg
   - lvm2
   - ntpdate
   - rsync

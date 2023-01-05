@@ -1,14 +1,14 @@
 #!/bin/bash
 # bootstrap.sh - Boostrap new WSL
 #
-# boostrap.sh
-#
 # * run OS update
 # * install minimal packages
 # * create ansible user
 # * setup home files
 #
-# Run bootstrap.sh
+# Run bootstrap.sh without a local repo:
+#
+#     curl https://raw.githubusercontent.com/dtroyer-salad/wsl-ansible/main/bootstrap.sh | bash -s
 
 set -o errexit
 set -o xtrace
@@ -30,12 +30,12 @@ if [[ -r /etc/os-release ]]; then
       # Debian/Ubuntu
       sudo apt-get update
       sudo apt-get -y upgrade
-      sudo apt-get -y install ansible git make
+      sudo apt-get -y install ansible curl git make
       ;;
     fedora)
       # Fedora/RHEL/OEL
-      sudo dnf -y install ansible-core git make
-      ansible-galaxy collection install ansible.posix community.crypto
+      sudo dnf -y install ansible-core curl git make
+      ansible-galaxy collection install ansible.posix chocolatey.chocolatey community.crypto
       ;;
   esac
 fi

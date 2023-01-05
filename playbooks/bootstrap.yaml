@@ -12,6 +12,7 @@
   tasks:
     - name: Set hostname
       shell: |
-        host=$(hostname)
-        echo ${host%-*}-{{ lookup('ansible.builtin.env', 'WSL_DISTRO_NAME') }} >/etc/hostname
+        distro={{ lookup('ansible.builtin.env', 'WSL_DISTRO_NAME') }}
+        echo ${distro} >/etc/hostname
         hostname -F /etc/hostname
+        sed -i "s/^\(127.0.1.1[[:space:]]*\).*$/\1 $distro.\t$distro/" /etc/hosts
