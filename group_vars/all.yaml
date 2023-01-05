@@ -23,10 +23,8 @@ extra_users: []
 # Users who should be removed
 disabled_users: []
 
-# Email destination
-mailhub: mail2.xr7.org:587
-
 # Email config
 email_domain: xr7.org
 root_email: "dt-root@{{ email_domain }}"
-mailhub: "mail2.{{ email_domain}}"
+# mailhub: "mail2.{{ email_domain}}"
+mailhub: "mail2.{{ email_domain }}:587"
