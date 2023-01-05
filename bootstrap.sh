@@ -40,12 +40,24 @@ if [[ -r /etc/os-release ]]; then
   esac
 fi
 
+# Set hostname (duplicated in boostrap.yaml playbook but we may not always use that)
+echo "$WSL_DISTRO_NAME" | sudo tee /etc/hostname
+sudo hostname -F /etc/hostname
+sed "s/^\(127.0.1.1[[:space:]]*\).*$/\1 $WSL_DISTRO_NAME.\t$WSL_DISTRO_NAME/" /etc/hosts
+
 if [[ ! -r ${REPO_DIR}/playbooks/bootstrap.yaml ]]; then
   # Retrieve the ansible repo
   git clone $GIT_REPO ${REPO_DIR}
 fi
 cd ${REPO_DIR}
 
+# Do Ansible bootstrap
 ansible-playbook playbooks/bootstrap.yaml \
       -i hosts.yaml \
       --extra-vars "host=local-wsl"
+
+# Get the dotfiles repo and install
+make dotfiles
+cd ../dotfiles
+. .homefuncs
+install_home
