@@ -9,8 +9,10 @@ all_users:
     comment: Dean Troyer
     key: |
       ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILcVNZlj+Ac496jNChmF1LhGCo6dyVnb758AxFjYjMrz dtroyer@sterling.lan
-    uid: 1000
-    gid: 1000
+    uid: 1010
+    gid: 1010
+    extra_groups:
+      - docker
     dotfiles_repo: https://github.com/dtroyer-salad/dotfiles
 
 # List of users to install on all hosts

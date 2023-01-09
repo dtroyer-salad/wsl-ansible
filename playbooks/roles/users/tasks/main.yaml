@@ -72,7 +72,7 @@
     uid: "{{ all_users[item].uid }}"
     group: "{{ item }}"
     comment: "{{ all_users[item].comment }}"
-    groups: "{{ sudo_group }}"
+    groups: "{{ sudo_group }}, {{ all_users[item].extra_groups | join(' ') }}"
     shell: /bin/bash
   when:
     - item in all_users
