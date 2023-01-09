@@ -22,6 +22,11 @@
     name: "{{ sudo_group }}"
     state: present
 
+- name: Add docker group
+  group:
+    name: "docker"
+    state: present
+
 # NOTE(mordred): We replace the main file rather than dropping a file in to
 # /etc/sudoers.d to deal with divergent base sudoers files from our distros.
 # We also want to change some default behavior (we want nopassword sudo, for
