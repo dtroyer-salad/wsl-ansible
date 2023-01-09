@@ -30,11 +30,11 @@ if [[ -r /etc/os-release ]]; then
       # Debian/Ubuntu
       sudo apt-get update
       sudo apt-get -y upgrade
-      sudo apt-get -y install ansible curl git gpg make screen wget
+      sudo apt-get -y install ansible curl git gpg make screen vim wget
       ;;
     fedora)
       # Fedora/RHEL/OEL
-      sudo dnf -y install ansible-core curl git gpg make screen wget
+      sudo dnf -y install ansible-core curl git gpg make screen vim wget
       ansible-galaxy collection install ansible.posix chocolatey.chocolatey community.crypto
       ;;
   esac
