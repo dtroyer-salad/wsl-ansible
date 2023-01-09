@@ -2,4 +2,4 @@ all_users: {}
 disabled_users: []
 extra_users: []
 
-sudo_group: "{{ 'sudo' if ansible_facts.os_family == 'Debian' else 'wheel' }}"
+sudo_group: "{{ 'sudo' if ansible_facts.os_family == 'Debian' or ansible_facts.os_family == 'Salad Enterprise Linux' else 'wheel' }}"
