@@ -1,16 +1,26 @@
 #!/bin/bash
-# install-cuda.sh [-deb|-run] [url]
+# install-cuda.sh [--deb|--run] [--wsl] [url]
 
 set -o errexit
 set -o xtrace
 
+UBUNTU_VERSION=${UBUNTU_VERSION:-2204}
+
+# Default to deb package installs
+DO_DEB=1
 if [[ -n $1 ]]; then
-	if [[ "$1" == "-deb" ]]; then
+	if [[ "$1" == "--deb" ]]; then
 		DO_DEB=1
+		unset DO_RUN
 		shift
 	fi
-	if [[ "$1" == "-run" ]]; then
+	if [[ "$1" == "--run" ]]; then
 		DO_RUN=1
+		unset DO_DEB
+		shift
+	fi
+	if [[ "$1" == "--wsl" ]]; then
+		DO_WSL=1
 		shift
 	fi
 fi
@@ -39,16 +49,16 @@ case $ID in
 		DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
 		;;
 	ubuntu)
-		PKG_BASE=cuda-repo-${ID}${VERSION_ID}-12-0-local
-		PKG_VER=12.0.0-525.60.13
+		if [[ -n $DO_WSL ]]; then
+			PKG_BASE=cuda-repo-wsl-ubuntu-12-0-local
+			PKG_VER=12.0.0-525.60.13
+			PIN_URL=${SRC_URL}/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
+		else
+			PKG_BASE=cuda-repo-${ID}${VERSION_ID}-12-0-local
+			PKG_VER=12.0.0
+			PIN_URL=${SRC_URL}/cuda/repos/ubuntu${UBUNTU_VERSION}/x86_64/cuda-ubuntu${UBUNTU_VERSION}.pin
+		fi
 		DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
-		PIN_URL=${SRC_URL}/cuda/repos/wsl-ubuntu/x86_64/cuda-ubuntu2204.pin
-		;;
-	ubuntu-wsl)
-		PKG_BASE=cuda-repo-wsl-ubuntu-12-0-local
-		PKG_VER=12.0.0
-		DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
-		PIN_URL=${SRC_URL}/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
 		;;
 	*)
 		echo "Unsupported distro: $ID"
@@ -90,5 +100,5 @@ curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-
             sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
             sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
-apt-get update
-apt-get install -y nvidia-docker2
+sudo apt-get update
+sudo apt-get install -y nvidia-docker2

@@ -21,12 +21,12 @@ CONTAINERD_URL=containerd.io_1.6.14-1_amd64.deb
 DOCKER_CE_URL=docker-ce_20.10.22~3-0~${ID}-${VERSION_CODENAME}_amd64.deb
 DOCKER_CE_CLI_URL=docker-ce-cli_20.10.22~3-0~${ID}-${VERSION_CODENAME}_amd64.deb
 
-apt-get update
-apt-get install libdevmapper1.02.1
+sudo apt-get update
+sudo apt-get install -y libdevmapper1.02.1
 
 for i in ${CONTAINERD_URL} ${DOCKER_CE_CLI_URL} ${DOCKER_CE_URL}; do
         wget -N ${DOCKER_URL}/$i
-        dpkg -i $i
+        sudo dpkg -i $i
 done
 
-/etc/init.d/docker start
+sudo /etc/init.d/docker start
