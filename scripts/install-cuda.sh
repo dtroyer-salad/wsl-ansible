@@ -32,9 +32,6 @@ if [[ "$ID" == "salad-enterprise-linux" ]]; then
         ID=debian
         VERSION_CODENAME=bullseye
         VERSION_ID=11
-elif [[ -n $ID_LIKE ]]; then
-        # If ID_LIKE is set use it for non-SEL distros
-        ID=$ID_LIKE
 fi
 
 SRC_URL=https://developer.download.nvidia.com/compute
@@ -49,7 +46,7 @@ case $ID in
 			ID=ubuntu
 			VERSION_ID=22.04
 			PKG_BASE=cuda-repo-wsl-ubuntu-12-0-local
-			PKG_VER=12.0.0-525.60.13
+			PKG_VER=12.0.0
 			PIN_URL=${SRC_URL}/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
 			DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
 		else
@@ -61,7 +58,7 @@ case $ID in
 	ubuntu)
 		if [[ -n $DO_WSL ]]; then
 			PKG_BASE=cuda-repo-wsl-ubuntu-12-0-local
-			PKG_VER=12.0.0-525.60.13
+			PKG_VER=12.0.0
 			PIN_URL=${SRC_URL}/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
 		else
 			PKG_BASE=cuda-repo-${ID}${VERSION_ID}-12-0-local
@@ -112,3 +109,5 @@ curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-
 
 sudo apt-get update
 sudo apt-get install -y nvidia-docker2
+
+sudo /etc/init.d/docker start

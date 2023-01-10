@@ -11,9 +11,6 @@ if [[ "$ID" == "salad-enterprise-linux" ]]; then
         ID=debian
         VERSION_CODENAME=bullseye
         VERSION_ID=11
-elif [[ -n $ID_LIKE ]]; then
-        # If ID_LIKE is set use it for non-SEL distros
-        ID=$ID_LIKE
 fi
 
 DOCKER_URL=${DOCKER_URL:-https://download.docker.com/linux/${ID}/dists/${VERSION_CODENAME}/pool/stable/amd64}
