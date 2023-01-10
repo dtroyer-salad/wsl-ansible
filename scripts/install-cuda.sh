@@ -44,9 +44,19 @@ fi
 
 case $ID in
 	debian)
-		PKG_BASE=cuda-repo-${ID}${VERSION_ID}-12-0-local
-		PKG_VER=12.0.0-525.60.13
-		DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
+		if [[ -n $DO_WSL ]]; then
+			# Force ubuntu here
+			ID=ubuntu
+			VERSION_ID=22.04
+			PKG_BASE=cuda-repo-wsl-ubuntu-12-0-local
+			PKG_VER=12.0.0-525.60.13
+			PIN_URL=${SRC_URL}/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
+			DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
+		else
+			PKG_BASE=cuda-repo-${ID}${VERSION_ID}-12-0-local
+			PKG_VER=12.0.0-525.60.13
+			DEB_URL=${SRC_URL}/cuda/12.0.0/local_installers/${PKG_BASE}_${PKG_VER}-1_amd64.deb
+		fi
 		;;
 	ubuntu)
 		if [[ -n $DO_WSL ]]; then
