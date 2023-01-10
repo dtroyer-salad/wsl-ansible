@@ -24,6 +24,18 @@ backup:
 bootstrap:
 	ansible-playbook $(INVENTORY) $(ARGS) playbooks/bootstrap.yaml
 
+cuda:
+	scripts/install-cuda.sh
+
+cuda-rt:
+	curl http://rt.lan/nvidia/install-cuda.sh | sudo bash -s http://rt.lan/nvidia
+
+docker:
+	scripts/install-docker.sh
+
+docker-rt:
+	curl http://rt.lan/nvidia/install-docker.sh | bash -s
+
 dotfiles:
 	ansible-playbook $(INVENTORY) $(ARGS) playbooks/dotfiles.yaml
 
