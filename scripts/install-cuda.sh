@@ -110,10 +110,10 @@ curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-
 sudo apt-get update
 sudo apt-get install -y nvidia-docker2
 
-sudo /etc/init.d/docker start
+sudo /etc/init.d/docker restart
 
 # Hack-around a difference in Ubuntu and Debian
-if [[ ! -x /sbin/ldconfig.real ]]; then
+if [[ ! -r /sbin/ldconfig.real ]]; then
 	# nvidia-container-cli expects to find ldconfig.real which doesn't exist on Debian
 	sudo ln /sbin/ldconfig /sbin/ldconfig.real
 fi

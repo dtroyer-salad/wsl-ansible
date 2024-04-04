@@ -1,0 +1,33 @@
+#!/bin/sh -e
+#
+# selrc
+#
+# This iscript is traditionally executed at the end of each multiuser
+# runlevel, however in WSL there is no SysVInit or systemd by default.
+# This incarnation is launched via /etc/wsl.conf:
+#
+#   [boot]
+#   command="/etc/selrc"
+#
+
+set -x
+
+# cgroups work-around
+# This is a work-around for https://github.com/microsoft/WSL/issues/4189
+# that is still open as of 2024-04
+mkdir -p /sys/fs/cgroup/systemd
+if ! $(mount | grep /sys/fs/cgroup/systemd >/dev/null); then
+    mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+fi
+
+# Fixup hosts
+if [[ -n $WSL_DISTRO_NAME ]]; then
+    echo $WSL_DISTRO_NAME >/etc/hostname
+    hostname -F /etc/hostname
+fi
+sed -i "s/^\(127.0.1.1[[:space:]]*\).*$/\1 $WSL_DISTRO_NAME.\t$WSL_DISTRO_NAME/" /etc/hosts
+
+# Run rc.local
+if [[ -x /etc/rc.local ]]; then
+        . /etc/rc.local
+fi
