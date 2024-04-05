@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 #
 # selrc
 #
@@ -29,5 +29,5 @@ sed -i "s/^\(127.0.1.1[[:space:]]*\).*$/\1 $WSL_DISTRO_NAME.\t$WSL_DISTRO_NAME/"
 
 # Run rc.local
 if [[ -x /etc/rc.local ]]; then
-        . /etc/rc.local
+    source /etc/rc.local
 fi

@@ -22,7 +22,7 @@ if [[ -r /etc/os-release ]]; then
     debian)
       # Debian/Ubuntu
       sudo apt-get update
-      sudo apt-get -y install curl git gpg make screen vim wget
+      sudo apt-get -y install curl git gpg make net-tools screen vim wget
       ;;
     fedora)
       # Fedora/RHEL/OEL
@@ -40,4 +40,4 @@ fi
 curl -R https://raw.githubusercontent.com/dtroyer-salad/wsl-ansible/main/selrc -o /etc/selrc
 chmod 755 /etc/selrc
 
-. /etc/selrc
+source /etc/selrc
