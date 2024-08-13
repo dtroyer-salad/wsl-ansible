@@ -10,16 +10,6 @@
 #   command="/etc/selrc"
 #
 
-set -x
-
-# cgroups work-around
-# This is a work-around for https://github.com/microsoft/WSL/issues/4189
-# that is still open as of 2024-04
-mkdir -p /sys/fs/cgroup/systemd
-if ! $(mount | grep /sys/fs/cgroup/systemd >/dev/null); then
-    mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
-fi
-
 # Fixup hosts
 if [[ -n $WSL_DISTRO_NAME ]]; then
     echo $WSL_DISTRO_NAME >/etc/hostname

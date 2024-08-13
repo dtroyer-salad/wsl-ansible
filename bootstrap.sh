@@ -40,10 +40,15 @@ if [[ -r /etc/os-release ]]; then
   esac
 fi
 
-# Set hostname (duplicated in boostrap.yaml playbook but we may not always use that)
-echo "$WSL_DISTRO_NAME" | sudo tee /etc/hostname
-sudo hostname -F /etc/hostname
-sed "s/^\(127.0.1.1[[:space:]]*\).*$/\1 $WSL_DISTRO_NAME.\t$WSL_DISTRO_NAME/" /etc/hosts
+if ! $(grep -i "\[boot\]" /etc/wsl.conf >/dev/null); then
+    # Add boot section to wsl.conf to run selrc
+    echo -e "[boot]\ncommand = \"/etc/selrc\"" >>/etc/wsl.conf
+fi
+
+# Get current selrc
+curl -R https://raw.githubusercontent.com/dtroyer-salad/wsl-ansible/main/selrc -o /etc/selrc
+chmod 755 /etc/selrc
+source /etc/selrc
 
 if [[ ! -r ${REPO_DIR}/playbooks/bootstrap.yaml ]]; then
   # Retrieve the ansible repo
